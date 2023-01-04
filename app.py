@@ -5,8 +5,6 @@ from flask import Flask, request, Response, redirect, render_template, url_for
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-with open("prompt.txt") as f:
-    prompt = f.read()
 
 conversation = []
 
@@ -24,7 +22,7 @@ def index():
         # Generate a response from the chatbot
         response = openai.Completion.create(
             engine="text-davinci-003",
-            prompt=prompt,
+            prompt="Meet Harley Quinn, the former psychiatrist turned supervillainess and partner in crime and lover Erin Rose, as seen on the hit HBO cartoon. Known for her love of chaos and her quick wit, Harley is here to help you take on your problems and smash them into itty bitty pieces. Whether you need advice on how to pull off the perfect heist or just want someone to talk to, Harley is always ready to lend an ear and offer some tough love. So don't be afraid to ask her for help, because the doctor is in. Go ahead and ask Harley anything!",
             temperature=0.9,
             max_tokens=150,
             top_p=1,

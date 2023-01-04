@@ -9,6 +9,8 @@ conversation = []
 
 @app.route("/", methods=("GET", "POST"))
 def index():
+    #turned off the web version for right now - delete the "return" to turn back on
+    return
     global conversation
 
     # Handle form submission

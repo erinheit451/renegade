@@ -1,16 +1,17 @@
 import os
 import openai
 from flask import Flask, request, Response, redirect, render_template, url_for
-#Blue
+
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+prompt = os.getenv("PROMPT_TEXT")
 
 conversation = []
 
 @app.route("/", methods=("GET", "POST"))
 def index():
-    #turned off the web version for right now - delete the "return" to turn back on
-    return
+   
     global conversation
 
     # Handle form submission
@@ -21,7 +22,7 @@ def index():
         # Generate a response from the chatbot
         response = openai.Completion.create(
             engine="text-davinci-003",
-            prompt=f"Harley helpline! How can I smash your problems into itty bitty pieces?\n{user_input}",
+            prompt=prompt,
             temperature=0.9,
             max_tokens=150,
             top_p=1,
@@ -41,7 +42,7 @@ def sms():
     # Generate a response
     response = openai.Completion.create(
         engine="text-davinci-003",
-        prompt=f"Harley helpline! How can I smash your problems into itty bitty pieces?\n{body}",
+        prompt=prompt,
         temperature=0.9,
         max_tokens=150,
         top_p=1,
@@ -49,7 +50,6 @@ def sms():
         presence_penalty=0.6
     )
     chatbot_response = response.choices[0].text
-
 
     # Create a TwiML response
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"

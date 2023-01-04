@@ -1,17 +1,18 @@
 import os
 import openai
 from flask import Flask, request, Response, redirect, render_template, url_for
-
+#Blue
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-prompt = os.getenv("PROMPT_TEXT")
+with open("prompt.txt") as f:
+    prompt = f.read()
 
 conversation = []
 
 @app.route("/", methods=("GET", "POST"))
 def index():
-   
+    
     global conversation
 
     # Handle form submission
@@ -50,6 +51,7 @@ def sms():
         presence_penalty=0.6
     )
     chatbot_response = response.choices[0].text
+
 
     # Create a TwiML response
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"

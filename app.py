@@ -1,7 +1,7 @@
 import os
 import openai
 from flask import Flask, request, Response, redirect, render_template, url_for
-#test comment
+#Blue
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 

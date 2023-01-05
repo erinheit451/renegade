@@ -1,6 +1,5 @@
 import os
 import openai
-from collections import deque
 
 # Read the prompt from a file
 with open("prompt.txt") as f:
@@ -10,7 +9,7 @@ with open("prompt.txt") as f:
 MAX_CONVERSATION_LENGTH = 100
 
 # Initialize the conversation history
-conversation = deque(maxlen=MAX_CONVERSATION_LENGTH)
+conversation = []
 
 @app.route("/sms", methods=["POST"])
 def sms():
@@ -60,8 +59,7 @@ def send_message(message):
     twilio_sid = os.getenv("TWILIO_SID")
     twilio_auth_token = os.getenv("TWILIO_AUTH_TOKEN")
     from_number = os.getenv("TWILIO_FROM_NUMBER")
-    to_number = os.getenv("TWILIO_TO_NUMBER")
 
     # Send the message using the Twilio API
     client = Client(twilio_sid, twilio_auth_token)
-    client.messages.create(body=message, from_=from_number, 
+    client.messages.create(body=message, from_=from_number, to=to_number)

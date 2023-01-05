@@ -25,5 +25,3 @@ def send_message():
     twiml_response = f"<Response><Message>{response}</Message></Response>"
 
     return Response(twiml_response, mimetype="text/xml")
-
-

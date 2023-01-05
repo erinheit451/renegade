@@ -9,7 +9,7 @@ with open("prompt.txt") as f:
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-@app.route("/send_message", methods=["POST"])
+@app.route("/sms", methods=["POST"])
 def send_message():
     user_input = request.form["text"]
     response = openai.Completion.create(

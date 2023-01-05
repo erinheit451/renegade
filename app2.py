@@ -12,8 +12,6 @@ HISTORY_SIZE = 10
 # Initialize the conversation history as a deque
 history = deque(maxlen=HISTORY_SIZE)
 
-
-
 @app.route("/sms", methods=["POST"])
 def sms():
     # Get the message body from the request

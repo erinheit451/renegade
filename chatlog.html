@@ -1,0 +1,5 @@
+<h1>Chatlog</h1>
+{% for conversation in conversations %}
+    <p>User: {{ conversation.user_input }}</p>
+    <p>Chatbot: {{ conversation.chatbot_response }}</p>
+{% endfor %}

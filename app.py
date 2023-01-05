@@ -10,8 +10,8 @@ app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route("/sms", methods=["POST"])
-def send_message():
-    user_input = request.form["text"]
+def sms():
+    user_input = request.form["Body"]
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=f"{prompt}\n{user_input}",

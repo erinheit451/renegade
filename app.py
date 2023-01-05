@@ -22,7 +22,10 @@ def send_message():
         presence_penalty=0.6
     )
 
-   # Create a TwiML response
-   twiml_response = f"<Response><Message>{response}</Message></Response>"
+    # Get the response text
+    response_text = response['text']
 
-   return Response(twiml_response, mimetype="text/xml")
+    # Create a TwiML response
+    twiml_response = f"<Response><Message>{response_text}</Message></Response>"
+
+    return Response(twiml_response, mimetype="text/xml")

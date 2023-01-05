@@ -1,7 +1,10 @@
 import os
 import openai
 from flask import Flask, request, Response, redirect, render_template, url_for
-#Blue
+
+with open("prompt.txt") as f:
+    prompt = f.read()
+
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -22,7 +25,7 @@ def index():
         # Generate a response from the chatbot
         response = openai.Completion.create(
             engine="text-davinci-003",
-            prompt=f"Harley helpline! How can I smash your problems into itty bitty pieces?\n{user_input}",
+            prompt=f"{prompt}\n{user_input}",
             temperature=0.9,
             max_tokens=150,
             top_p=1,
@@ -42,7 +45,7 @@ def sms():
     # Generate a response
     response = openai.Completion.create(
         engine="text-davinci-003",
-        prompt=f"Harley helpline! How can I smash your problems into itty bitty pieces?\n{body}",
+        prompt=f"{prompt}{body}",
         temperature=0.9,
         max_tokens=150,
         top_p=1,

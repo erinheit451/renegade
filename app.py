@@ -1,6 +1,5 @@
 import os
 import openai
-import json
 from flask import Flask, request, Response, redirect, render_template, url_for
 
 with open("prompt.txt") as f:
@@ -54,17 +53,7 @@ def sms():
         presence_penalty=0.6
     )
     chatbot_response = response.choices[0].text
- # Append the conversation to the chat log
-with open("conversations.json", "r+") as f:
-    # Read the existing conversations from the file
-    conversations = json.load(f)
 
-    # Add the new conversation to the list of conversations
-    conversations.append({"user": body, "chatbot": chatbot_response})
-
-    # Write the updated list of conversations to the file
-    f.seek(0)
-    json.dump(conversations, f)
 
     # Create a TwiML response
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"

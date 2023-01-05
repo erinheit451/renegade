@@ -2,7 +2,6 @@ import os
 import openai
 import json
 from flask import Flask, request, Response, redirect, render_template, url_for
-from logging import log_conversation
 
 with open("prompt.txt") as f:
     prompt = f.read()
@@ -22,7 +21,6 @@ def send_message():
         frequency_penalty=0,
         presence_penalty=0.6
     )
-    log_conversation(user_input, response)
     # Create a TwiML response
     twiml_response = f"<Response><Message>{response}</Message></Response>"
 

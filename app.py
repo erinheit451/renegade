@@ -4,7 +4,6 @@ import json
 from flask import Flask, request, Response, redirect, render_template, url_for
 from logging import log_conversation
 
-
 with open("prompt.txt") as f:
     prompt = f.read()
 
@@ -29,10 +28,4 @@ def send_message():
 
     return Response(twiml_response, mimetype="text/xml")
 
-@app.route("/chatlog")
-def show_chatlog():
-    conversations = []
-    with open("chatlog.json", "r") as f:
-        for line in f:
-            conversations.append(json.loads(line))
-    return render_template("chatlog.html", conversations=conversations)
+

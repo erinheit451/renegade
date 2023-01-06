@@ -22,7 +22,10 @@ def sms():
         chatbot_response = "Chat log reset."  # Set the chatbot's response
     else:
         # Generate a response
-        chatbot_response = openai.Completion.create(engine="text-davinci-003", prompt=f"{prompt}\n{'\n'.join([message for sender, message in conversation])}\n{body}", temperature=0.9, max_tokens=150).text
+        chatbot_response = openai.Completion.create(engine="text-davinci-003", prompt=f"""{prompt}
+{'\n'.join([message for sender, message in conversation])}
+{body}""", temperature=0.9, max_tokens=150).text
+
 
         # Store the conversation in the deque
         conversation.append({"user": body})

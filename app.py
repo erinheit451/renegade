@@ -13,8 +13,7 @@ conversation = []
 @app.route("/", methods=("GET", "POST"))
 def index():
    
-    #commenting out
-    return
+
     global conversation
 
     # Handle form submission
@@ -53,6 +52,7 @@ def sms():
         presence_penalty=0.6
     )
     chatbot_response = response.choices[0].text
+
 
     # Create a TwiML response
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"

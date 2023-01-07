@@ -10,6 +10,7 @@ conversation = []
 
 @app.route("/", methods=("GET", "POST"))
 def index():
+    
     global conversation
     # Handle form submission
     if request.method == "POST":

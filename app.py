@@ -1,5 +1,6 @@
 import os
 import openai
+from flask import Flask, request
 
 from twilio.rest import Client
 
@@ -51,7 +52,7 @@ def handle_incoming_message(sender, body):
     from_=TWILIO_PHONE_NUMBER,
     body=response.text
   )
-  
+
 # Create a Flask app
 app = Flask(__name__)
 

@@ -1,4 +1,5 @@
 import os
+<<<<<<< Updated upstream
 import openai
 import requests
 
@@ -73,3 +74,27 @@ chat_id = 12345
 sender = "Alice"
 body = "Hello, this is a test message."
 handle_incoming_message(chat_id, sender, body)
+=======
+from telegram.ext import Updater, CommandHandler
+
+# Import the generate_response function from response.py
+from response import generate_response
+
+def telegram_bot():
+    # Get the Telegram API key
+    telegram_api_key = os.getenv("TELEGRAM_API_KEY")
+
+    # Create the Updater and pass it the API key
+    updater = Updater(telegram_api_key, use_context=True)
+
+    # Add a command handler for the /start command
+    updater.dispatcher.add_handler(CommandHandler("start", start))
+
+    # Start the bot
+    updater.start_polling()
+    updater.idle()
+
+def start(update, context):
+    # Send a message to the user
+    update.message.reply_text("Hello! I am a chatbot. What can I help you with today?")
+>>>>>>> Stashed changes

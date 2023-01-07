@@ -1,7 +1,15 @@
 import os
 import openai
 from flask import Flask, request, Response, redirect, render_template, url_for
+
+# Import the desired value from prompt.py
 from prompt import prompt
+
+# Import the generate_response function from response.py
+from response import generate_response
+
+# Import the sms function from sms.py
+from sms import sms
 
 app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -10,8 +18,7 @@ conversation = []
 
 @app.route("/", methods=("GET", "POST"))
 def index():
-    #stopping app
-    return
+   
     global conversation
 
     # Handle form submission
@@ -20,23 +27,11 @@ def index():
         conversation.append({"user": user_input})
 
         # Generate a response from the chatbot
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-<<<<<<< Updated upstream
-            prompt=f"{prompt}{user_input}",
-=======
-            prompt=f"{prompt}\n{user_input}",
->>>>>>> Stashed changes
-            temperature=0.9,
-            max_tokens=150,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0.6
-    )
-
-        chatbot_response = response.choices[0].text
+        chatbot_response = generate_response(f"{prompt}\n{user_input}")
         conversation.append({"chatbot": chatbot_response})
 
+
+    # Return the rendered template
     return render_template("index.html", conversation=conversation)
 
 @app.route("/sms", methods=["POST"])
@@ -45,22 +40,7 @@ def sms():
     body = request.form["Body"]
 
     # Generate a response
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-<<<<<<< Updated upstream
-        prompt=f"{prompt}{body}",
-=======
-        prompt=f"{prompt}\n{body}",
->>>>>>> Stashed changes
-        temperature=0.9,
-        max_tokens=150,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0.6
-    )
-
-    chatbot_response = response.choices[0].text
-
+    chatbot_response = generate_response(f"{prompt}{body}")
 
     # Create a TwiML response
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"

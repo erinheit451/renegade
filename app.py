@@ -26,7 +26,14 @@ def handle_incoming_message(sender, body):
   chatlog.append({"sender": sender, "body": body})
 
   # Calculate the maximum size of the chatlog in tokens
-  prompt_size = len(openai.Completion.create(model="text-davinci-003", prompt="").text)
+  try:
+    prompt_size = len(openai.Completion.create(model="text-davinci-003", prompt="").text)
+  except openai.api_errors.ApiException as e:
+    print("An error occurred when calling the OpenAI API:")
+    print(e)
+    print(f"prompt_size = {prompt_size}")
+    return
+
   max_size = 4096 - prompt_size  # Maximum size of the chatlog in tokens
 
   # Prune the chatlog to remove older messages if needed
@@ -36,15 +43,20 @@ def handle_incoming_message(sender, body):
 
   # Use the OpenAI API to generate a response to the incoming message
   prompt = "\n".join(f"{message['sender']}: {message['body']}" for message in chatlog)
-  response = print(openai.Completion.create(
-    model="text-davinci-003",
-    prompt=prompt,
-    temperature=0.7,
-    max_tokens=4096,
-    top_p=1,
-    frequency_penalty=0,
-    presence_penalty=0
-  )
+  try:
+    response = openai.Completion.create(
+      model="text-davinci-003",
+      prompt=prompt,
+      temperature=0.7,
+      max_tokens=200,
+      top_p=1,
+      frequency_penalty=0,
+      presence_penalty=0
+    )
+  except openai.api_errors.ApiException as e:
+    print("An error occurred when calling the OpenAI API:")
+    print(e)
+    return
 
   # Send the response back to the sender as an SMS message
   client.messages.create(

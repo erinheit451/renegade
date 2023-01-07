@@ -51,6 +51,9 @@ def handle_incoming_message(sender, body):
     from_=TWILIO_PHONE_NUMBER,
     body=response.text
   )
+  
+# Create a Flask app
+app = Flask(__name__)
 
 # Set up a Twilio webhook to listen for incoming messages
 @app.route("/sms", methods=["POST"])
@@ -59,3 +62,6 @@ def incoming_sms():
   body = request.form["Body"]
   handle_incoming_message(sender, body)
   return "OK"
+
+if __name__ == "__main__":
+  app.run()

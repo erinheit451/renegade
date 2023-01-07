@@ -10,8 +10,7 @@ conversation = []
 
 @app.route("/", methods=("GET", "POST"))
 def index():
-    #stopping app
-    return
+
     global conversation
 
     # Handle form submission
@@ -22,11 +21,7 @@ def index():
         # Generate a response from the chatbot
         response = openai.Completion.create(
             engine="text-davinci-003",
-<<<<<<< Updated upstream
             prompt=f"{prompt}{user_input}",
-=======
-            prompt=f"{prompt}\n{user_input}",
->>>>>>> Stashed changes
             temperature=0.9,
             max_tokens=150,
             top_p=1,
@@ -47,11 +42,7 @@ def sms():
     # Generate a response
     response = openai.Completion.create(
         engine="text-davinci-003",
-<<<<<<< Updated upstream
         prompt=f"{prompt}{body}",
-=======
-        prompt=f"{prompt}\n{body}",
->>>>>>> Stashed changes
         temperature=0.9,
         max_tokens=150,
         top_p=1,

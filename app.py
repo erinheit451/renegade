@@ -1,8 +1,9 @@
 import os
 import openai
 from flask import Flask, request
-
+from dotenv import load_dotenv
 from twilio.rest import Client
+load_dotenv()
 
 # Load secure info from .env file
 TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")

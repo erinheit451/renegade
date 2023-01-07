@@ -11,8 +11,7 @@ conversation = []
 @app.route("/", methods=("GET", "POST"))
 def index():
 
-    #commentingout
-    return
+
     global conversation
 
     # Handle form submission

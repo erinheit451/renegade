@@ -1,60 +1,61 @@
 import os
 import openai
-from flask import Flask, request, Response, redirect, render_template, url_for
-from prompt import prompt
 
-app = Flask(__name__)
-openai.api_key = os.getenv("OPENAI_API_KEY")
+from twilio.rest import Client
 
-conversation = []
+# Load secure info from .env file
+TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-@app.route("/", methods=("GET", "POST"))
-def index():
+# Set up Twilio client
+client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
+# Set up OpenAI API client
+openai.api_key = OPENAI_API_KEY
 
-    global conversation
+# Initialize chatlog
+chatlog = []
 
-    # Handle form submission
-    if request.method == "POST":
-        user_input = request.form["input"]
-        conversation.append({"user": user_input})
+def handle_incoming_message(sender, body):
+  global chatlog
 
-        # Generate a response from the chatbot
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=f"{prompt}{user_input}",
-            temperature=0.9,
-            max_tokens=150,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0.6
-    )
+  # Add the incoming message to the chatlog
+  chatlog.append({"sender": sender, "body": body})
 
-        chatbot_response = response.choices[0].text
-        conversation.append({"chatbot": chatbot_response})
+  # Calculate the maximum size of the chatlog in tokens
+  prompt_size = len(openai.Completion.create(model="text-davinci-003", prompt="").text)
+  max_size = 4096 - prompt_size  # Maximum size of the chatlog in tokens
 
-    return render_template("index.html", conversation=conversation)
+  # Prune the chatlog to remove older messages if needed
+  chatlog_size = sum(len(message["body"]) for message in chatlog)
+  while chatlog_size > max_size:
+    chatlog_size -= len(chatlog.pop(0)["body"])
 
+  # Use the OpenAI API to generate a response to the incoming message
+  prompt = "\n".join(f"{message['sender']}: {message['body']}" for message in chatlog)
+  response = openai.Completion.create(
+    model="text-davinci-003",
+    prompt=prompt,
+    temperature=0.7,
+    max_tokens=4096,
+    top_p=1,
+    frequency_penalty=0,
+    presence_penalty=0
+  )
+
+  # Send the response back to the sender as an SMS message
+  client.messages.create(
+    to=sender,
+    from_=TWILIO_PHONE_NUMBER,
+    body=response.text
+  )
+
+# Set up a Twilio webhook to listen for incoming messages
 @app.route("/sms", methods=["POST"])
-def sms():
-    # Get the message body from the request
-    body = request.form["Body"]
-
-    # Generate a response
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=f"{prompt}{body}",
-        temperature=0.9,
-        max_tokens=150,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0.6
-    )
-
-    chatbot_response = response.choices[0].text
-
-
-    # Create a TwiML response
-    twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"
-
-    return Response(twiml_response, mimetype="text/xml")
+def incoming_sms():
+  sender = request.form["From"]
+  body = request.form["Body"]
+  handle_incoming_message(sender, body)
+  return "OK"

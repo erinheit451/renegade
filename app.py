@@ -36,7 +36,7 @@ def handle_incoming_message(sender, body):
 
   # Use the OpenAI API to generate a response to the incoming message
   prompt = "\n".join(f"{message['sender']}: {message['body']}" for message in chatlog)
-  response = openai.Completion.create(
+  response = print(openai.Completion.create(
     model="text-davinci-003",
     prompt=prompt,
     temperature=0.7,

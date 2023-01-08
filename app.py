@@ -9,11 +9,16 @@ from record import log_permanent_record, load_permanent_record
 from telegram_bot import bot, webhook_handler, conversation
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
+api_token = os.getenv('TELEGRAM_API_TOKEN')
 
 app = Flask(__name__)
 
 conversation = load_conversation_log()
 log_conversation(conversation)
+
+bot = telegram_bot.Bot(token=TELEGRAM_API_TOKEN)
+bot.polling()
+
 
 @app.route("/", methods=("GET", "POST"))
 def index():

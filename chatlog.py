@@ -12,16 +12,8 @@ def load_conversation_log():
         conversation = []
     return conversation
 
-def prune_chatlog(chatlog: str, max_tokens: int) -> str:
-    tokens = chatlog.split()
-    while len(tokens) > max_tokens:
-        # Split the chatlog into lines
-        lines = chatlog.split("\n")
-        # Remove the oldest message (the first line)
-        lines.pop(0)
-        # Join the lines back into a single string
-        chatlog = "\n".join(lines)
-        # Update the list of tokens
-        tokens = chatlog.split()
-    return chatlog
+def prune_conversation_log(conversation, max_tokens):
+    while len(conversation) > max_tokens:
+        conversation.pop(0)
+    return conversation
 

@@ -12,12 +12,16 @@ def load_conversation_log():
         conversation = []
     return conversation
 
-def prune_conversation_log(conversation_log):
-    conversation_str = ""
-    for message in conversation_log:
-        if "user" in message:
-            conversation_str += f"USER: {message['user']}\n"
-        elif "chatbot" in message:
-            conversation_str += f"CHATBOT: {message['chatbot']}\n"
-    return conversation_str
+def prune_chatlog(chatlog: str, max_tokens: int) -> str:
+    tokens = chatlog.split()
+    while len(tokens) > max_tokens:
+        # Split the chatlog into lines
+        lines = chatlog.split("\n")
+        # Remove the oldest message (the first line)
+        lines.pop(0)
+        # Join the lines back into a single string
+        chatlog = "\n".join(lines)
+        # Update the list of tokens
+        tokens = chatlog.split()
+    return chatlog
 

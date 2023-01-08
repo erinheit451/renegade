@@ -59,14 +59,7 @@ def webhook_handler():
     log_permanent_record(conversation)
     # Send the response to the user
     bot.send_message(chat_id=update.message.chat_id, text=chatbot_response)
+    # Return a response
+    return make_response("OK", 200)
 
-def set_webhook():
-    # Set the webhook
-    bot_url = f'https://renegade.herokuapp.com/hook'
-    bot.set_webhook(url=bot_url)
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-    set_webhook()
 

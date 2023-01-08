@@ -1,8 +1,8 @@
 import os
 import openai
-import telegram_bot
+import telegram
 import requests
-from flask import Flask, request, Response, redirect, render_template, url_for
+from flask import Flask, request, Response
 from prompt import prompt
 from response import generate_chatbot_response
 from chatlog import log_conversation, load_conversation_log, prune_conversation_log
@@ -11,9 +11,12 @@ from record import log_permanent_record, load_permanent_record
 openai.api_key = os.getenv("OPENAI_API_KEY")
 api_token = os.getenv('TELEGRAM_API_TOKEN')
 
-bot = telegram_bot.Bot(token=api_token)
+bot = telegram.Bot(token=api_token)
 
 app = Flask(__name__)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 conversation = []
 conversation = load_conversation_log()
@@ -25,11 +28,12 @@ def set_webhook():
     response = requests.post(url, data={'url': 'https://renegade.herokuapp.com/hook'})
     print(response.status_code)
 
+set_webhook()
 
 @app.route('/hook', methods=['POST'])
 def webhook_handler():
     # Get the update from Telegram
-    update = telegram_bot.Update.de_json(request.get_json(force=True), bot)
+    update = telegram.Update.de_json(request.get_json(force=True), bot)
     # Update the conversation log
     conversation.append({"user": update.message.text})
     # Generate a response
@@ -40,4 +44,3 @@ def webhook_handler():
     # Send the response to Telegram
     bot.send_message(chat_id=update.message.chat_id, text=chatbot_response)
     return 'ok'
-

@@ -18,11 +18,9 @@ app = Flask(__name__)
 
 conversation = load_conversation_log()
 log_conversation(conversation)
-chatlog.log_conversation()
-chatlog.load_conversation_log()
-chatlog.prune_conversation_log()
 
-@app.route("/", methods=("POST"))
+
+@app.route("/", methods=["POST"])
 def index():
     global conversation
     # Handle form submission
@@ -51,8 +49,3 @@ def sms():
     # Create a TwiML response
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"
     return Response(twiml_response, mimetype="text/xml")
-
-
-
-
-

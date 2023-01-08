@@ -12,7 +12,7 @@ def load_conversation_log():
         conversation = []
     return conversation
 
-def prune_conversation_log(conversation, max_tokens):
+def prune_conversation_log(conversation, max_tokens=300):
     while len(conversation) > max_tokens:
         conversation.pop(0)
     return conversation

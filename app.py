@@ -1,6 +1,7 @@
 import os
 import openai
 import requests
+import telegram_bot
 from flask import Flask, request, Response, render_template
 from prompt import prompt
 from response import generate_chatbot_response
@@ -9,14 +10,15 @@ from record import log_permanent_record, load_permanent_record
 from telegram_bot import bot, webhook_handler, conversation
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
-api_token = os.getenv('TELEGRAM_API_TOKEN')
+api_token = os.getenv("TELEGRAM_API_TOKEN")
+
 
 app = Flask(__name__)
 
 conversation = load_conversation_log()
 log_conversation(conversation)
 
-bot = telegram_bot.Bot(token=TELEGRAM_API_TOKEN)
+bot = telegram_bot.Bot(token="TELEGRAM_API_TOKEN")
 bot.polling()
 
 

@@ -2,6 +2,7 @@ import os
 import openai
 import telegram
 import requests
+import dotenv
 from flask import Flask, request, Response
 from prompt import prompt
 from response import generate_chatbot_response
@@ -9,17 +10,17 @@ from chatlog import log_conversation, load_conversation_log, prune_conversation_
 from record import log_permanent_record, load_permanent_record
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
-api_token = os.getenv('TELEGRAM_API_TOKEN')
-
-bot = telegram.Bot(token=api_token)
+dotenv.load_dotenv()
+bot = telegram.Bot(token=os.environ['TELEGRAM_BOT_TOKEN'])
 
 app = Flask(__name__)
 
 def set_webhook():
-    url = "https://api.telegram.org/bot{}/setWebhook".format(api_token)
+    url = "https://api.telegram.org/bot{}/setWebhook".format(os.environ['TELEGRAM_API_TOKEN'])
     # Set the webhook to the URL of your Flask app
     response = requests.post(url, data={'url': 'https://renegade.herokuapp.com/hook'})
     print(response.status_code)
+
 
 if __name__ == "__main__":
     set_webhook()

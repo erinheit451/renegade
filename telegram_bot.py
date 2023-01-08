@@ -14,13 +14,6 @@ api_token = os.getenv('TELEGRAM_API_TOKEN')
 bot = telegram.Bot(token=api_token)
 
 app = Flask(__name__)
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-
-conversation = []
-conversation = load_conversation_log()
-log_conversation(conversation)
 
 def set_webhook():
     url = "https://api.telegram.org/bot{}/setWebhook".format(api_token)
@@ -28,7 +21,14 @@ def set_webhook():
     response = requests.post(url, data={'url': 'https://renegade.herokuapp.com/hook'})
     print(response.status_code)
 
-set_webhook()
+if __name__ == "__main__":
+    set_webhook()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
+
+conversation = []
+conversation = load_conversation_log()
+log_conversation(conversation)
 
 @app.route('/hook', methods=['POST'])
 def webhook_handler():

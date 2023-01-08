@@ -26,7 +26,7 @@ def index():
         user_input = request.form["input"]
         conversation.append({"user": user_input})
         # Generate a response from the chatbot
-        chatlog = prune_conversation_log(conversation, max_tokens)
+        chatlog = prune_conversation_log(conversation)
         chatbot_response = generate_chatbot_response(prompt, user_input, chatlog)
         conversation.append({"chatbot": chatbot_response})
         log_permanent_record(conversation)
@@ -39,7 +39,7 @@ def sms():
     # Get the message body from the request
     body = request.form["Body"]
     # Generate a response
-    chatlog = prune_conversation_log(conversation, max_tokens)
+    chatlog = prune_conversation_log(conversation)
     chatbot_response = generate_chatbot_response(prompt, body, chatlog)
     conversation.append({"chatbot": chatbot_response})
     log_permanent_record(conversation)

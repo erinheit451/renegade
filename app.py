@@ -27,7 +27,8 @@ def index():
         chatbot_response = generate_chatbot_response(prompt, user_input, chatlog)
         conversation.append({"chatbot": chatbot_response})
         log_permanent_record(conversation)
-    return
+    return render_template("index.html", conversation=conversation)
+
 
 @app.route("/sms", methods=["POST"])
 def sms():

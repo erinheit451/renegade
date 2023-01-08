@@ -1,17 +1,16 @@
 import os
 import openai
-import requests
-from flask import Flask, request, Response, render_template
+from flask import Flask, request, Response, redirect, render_template, url_for
 from prompt import prompt
 from response import generate_chatbot_response
 from chatlog import log_conversation, load_conversation_log, prune_conversation_log
 from record import log_permanent_record, load_permanent_record
-from telegram_bot import bot, webhook_handler, conversation
+
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
-
 app = Flask(__name__)
 
+conversation = []
 conversation = load_conversation_log()
 log_conversation(conversation)
 
@@ -27,7 +26,8 @@ def index():
         chatbot_response = generate_chatbot_response(prompt, user_input, chatlog)
         conversation.append({"chatbot": chatbot_response})
         log_permanent_record(conversation)
-    return
+    return render_template("index.html", conversation=conversation)
+
 
 @app.route("/sms", methods=["POST"])
 def sms():
@@ -41,4 +41,3 @@ def sms():
     # Create a TwiML response
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"
     return Response(twiml_response, mimetype="text/xml")
-

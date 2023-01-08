@@ -45,3 +45,25 @@ def webhook_handler():
     # Send the response to Telegram
     bot.send_message(chat_id=update.message.chat_id, text=chatbot_response)
     return 'ok'
+
+
+
+@app.route('/hook', methods=['GET', 'POST'])
+def webhook_handler():
+     global conversation
+    if request.method == 'POST':
+        # Get the update from Telegram
+        update = telegram.Update.de_json(request.get_json(force=True), bot)
+        # Update the conversation log
+        conversation.append({"user": update.message.text})
+        # Prune the conversation to ensure it doesn't exceed the maximum number of tokens
+        conversation = prune_chatlog(conversation, 300)
+        # Generate a response
+        chatlog = prune_chatlog(conversation)
+        chatbot_response = generate_chatbot_response(prompt, update.message.text, chatlog)
+        conversation.append({"chatbot": chatbot_response})
+        # Send the response to the user
+        bot.send_message(chat_id=update.message.chat_id, text=chatbot_response)
+    else:
+        # This is a GET request, so just return a simple message
+        return "Webhook handler is working!"

@@ -46,19 +46,23 @@ def sms():
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"
     return Response(twiml_response, mimetype="text/xml")
 
-@app.route('/hook', methods=['POST'])
+@app.route('/hook', methods=['GET', 'POST'])
 def webhook_handler():
-    # Get the update from Telegram
-    update = telegram.Update.de_json(request.get_json(force=True), bot)
-    # Update the conversation log
-    conversation.append({"user": update.message.text})
-    # Generate a response
-    chatlog = prune_conversation_log(conversation)
-    chatbot_response = generate_chatbot_response(prompt, update.message.text, chatlog)
-    conversation.append({"chatbot": chatbot_response})
-    log_permanent_record(conversation)
-    # Send the response to the user
-    bot.send_message(chat_id=update.message.chat_id, text=chatbot_response)
+    if request.method == 'POST':
+        # Get the update from Telegram
+        update = telegram.Update.de_json(request.get_json(force=True), bot)
+        # Update the conversation log
+        conversation.append({"user": update.message.text})
+        # Generate a response
+        chatlog = prune_conversation_log(conversation)
+        chatbot_response = generate_chatbot_response(prompt, update.message.text, chatlog)
+        conversation.append({"chatbot": chatbot_response})
+        log_permanent_record(conversation)
+        # Send the response to the user
+        bot.send_message(chat_id=update.message.chat_id, text=chatbot_response)
+    else:
+        # This is a GET request, so just return a simple message
+        return "Webhook handler is working!"
     # Return a response
     return make_response("OK", 200)
 

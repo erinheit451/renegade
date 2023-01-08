@@ -1,6 +1,6 @@
 import os
 import openai
-import telegram
+import telegram_bot
 import requests
 from flask import Flask, request, Response, redirect, render_template, url_for
 from prompt import prompt
@@ -11,7 +11,7 @@ from record import log_permanent_record, load_permanent_record
 openai.api_key = os.getenv("OPENAI_API_KEY")
 api_token = os.getenv('TELEGRAM_API_TOKEN')
 
-bot = telegram.Bot(token=api_token)
+bot = telegram_bot.Bot(token=api_token)
 
 app = Flask(__name__)
 
@@ -22,14 +22,14 @@ log_conversation(conversation)
 def set_webhook():
     url = "https://api.telegram.org/bot{}/setWebhook".format(api_token)
     # Set the webhook to the URL of your Flask app
-    response = requests.post(url, data={'url': 'https://renegade.heroku.com/tele'})
+    response = requests.post(url, data={'url': 'https://renegade.herokuapp.com/hook'})
     print(response.status_code)
 
 
 @app.route('/hook', methods=['POST'])
 def webhook_handler():
     # Get the update from Telegram
-    update = telegram.Update.de_json(request.get_json(force=True), bot)
+    update = telegram_bot.Update.de_json(request.get_json(force=True), bot)
     # Update the conversation log
     conversation.append({"user": update.message.text})
     # Generate a response
@@ -40,3 +40,4 @@ def webhook_handler():
     # Send the response to Telegram
     bot.send_message(chat_id=update.message.chat_id, text=chatbot_response)
     return 'ok'
+

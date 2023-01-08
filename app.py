@@ -19,8 +19,7 @@ app = Flask(__name__)
 conversation = load_conversation_log()
 log_conversation(conversation)
 
-
-@app.route("/", methods=["POST"])
+@app.route("/", methods=("GET", "POST"))
 def index():
     global conversation
     # Handle form submission
@@ -34,6 +33,7 @@ def index():
         chatbot_response = generate_chatbot_response(prompt, user_input, chatlog)
         conversation.append({"chatbot": chatbot_response})
     return render_template("index.html", conversation=conversation)
+
 
 @app.route("/sms", methods=["POST"])
 def sms():

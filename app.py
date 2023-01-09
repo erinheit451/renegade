@@ -40,17 +40,18 @@ def index():
     # Handle form submission
     if request.method == "POST":
         user_input = request.form["input"]
-        conversation_log.append(user_input)
+        conversation_log.append({"user": user_input})
         # Generate a response from the chatbot
         pruned_log = prune_conversation_log(conversation_log)
         chatbot_response = generate_chatbot_response(prompt, user_input, pruned_log)
-        conversation_log.append(chatbot_response)
+        conversation_log.append({"chatbot": chatbot_response})
         # Save the updated conversation log to file
         with open("conversation_log.json", "w") as log_file:
             json.dump(conversation_log, log_file)
         return render_template("index.html", conversation=conversation_log, prompt=prompt)
     else:
         return render_template("index.html", conversation=conversation_log, prompt=prompt)
+
 
 @app.route("/sms", methods=["POST"])
 def sms():

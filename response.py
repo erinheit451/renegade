@@ -4,10 +4,11 @@ from flask import Flask, request, Response, redirect, render_template, url_for
 from prompt import prompt
 
 def generate_chatbot_response(prompt: str, user_input: str, chatlog: str) -> str:
-    history = chatlog + "\n" + user_input
+    history = "\n".join(chatlog + [user_input])
+    history_str = "".join(history)
     response = openai.Completion.create(
         engine="text-davinci-003",
-        prompt=f"{prompt}\n{history}",
+        prompt=f"{prompt}\n{history_str}",
         temperature=0.9,
         max_tokens=150,
         top_p=1,

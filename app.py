@@ -12,9 +12,10 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # Load conversation log from file
 try:
     with open("conversation_log.json", "r") as log_file:
-        conversation_log = json.load(log_file)
+        conversation_log = [entry['user'] for entry in json.load(log_file) if 'user' in entry]
 except:
     conversation_log = []
+
 
 def prune_conversation_log(log, max_tokens=300):
     while len(log) > max_tokens:

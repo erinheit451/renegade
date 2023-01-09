@@ -48,9 +48,9 @@ def index():
         # Save the updated conversation log to file
         with open("conversation_log.json", "w") as log_file:
             json.dump(conversation_log, log_file)
-        return render_template("index.html", conversation=conversation_log)
+        return render_template("index.html", conversation=conversation_log, prompt=prompt)
     else:
-        return render_template("index.html", conversation=conversation_log)
+        return render_template("index.html", conversation=conversation_log, prompt=prompt)
 
 @app.route("/sms", methods=["POST"])
 def sms():

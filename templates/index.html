@@ -17,7 +17,7 @@
       {% for message in conversation %}
         <div class="card mt-3">
           <div class="card-body">
-            {% if message['user'] %}
+            {% if message.get('user') %}
               <div class="message user">{{ message['user'] }}</div>
             {% else %}
               <div class="message chatbot">{{ message['chatbot'] }}</div>
@@ -33,11 +33,4 @@
       </form>
     </div>
   </body>
-
-  
-  
 </html>
-
-
-
-

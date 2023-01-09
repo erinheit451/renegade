@@ -20,5 +20,11 @@
             {% if message.get('user') %}
               <div class="message user">{{ message['user'] }}</div>
             {% else %}
-             
-
+              <div class="message bot">{{ message['bot'] }}</div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>

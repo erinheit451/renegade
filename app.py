@@ -23,7 +23,9 @@ def prune_conversation_log(log, max_tokens=300):
     return log
 
 def generate_chatbot_response(prompt, user_input, chatlog):
-    history = "\n".join(chatlog + [user_input])
+    chatlog = [message['chatbot'] for message in chatlog]
+    chatlog.append(user_input)
+    history = "\n".join(chatlog)
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=f"{prompt}\n{history}",
@@ -35,6 +37,7 @@ def generate_chatbot_response(prompt, user_input, chatlog):
     )
     chatbot_response = response.choices[0].text
     return chatbot_response
+
 
 @app.route("/", methods=("GET", "POST"))
 def index():

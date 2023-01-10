@@ -74,10 +74,3 @@ def sms():
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"
     return Response(twiml_response, mimetype="text/xml")
 
-# Start the Telegram bot in a separate thread
-thread = threading.Thread(target=telegram_bot.run_bot)
-thread.start()
-
-# Run the Flask app
-if __name__ == "__main__":
-    app.run()

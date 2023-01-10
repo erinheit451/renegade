@@ -78,7 +78,8 @@ telegram_bot.start_bot()
 
 # Set the webhook URL
 bot = telegram_bot.bot
-bot.set_webhook(url=https://renegade.herokuapp.com/hook)
+bot.set_webhook(url="https://renegade.herokuapp.com/hook")
+
 
 # Run the Flask app
 app.run()

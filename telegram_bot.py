@@ -36,7 +36,7 @@ def generate_chatbot_response(prompt, user_input, chatlog):
     return chatbot_response
 
 # Create the bot
-bot = telegram.Bot(token="5751626277:AAG21V-LeR1tNHVjl6bIbDekKVWIVXqyNFA")
+bot = telegram.Bot(token="5751626277:AAG21V-LeR1tNHVjl6bIbDekKVW")
 
 # Create the Updater and pass it the bot's token
 updater = Updater(bot=bot)

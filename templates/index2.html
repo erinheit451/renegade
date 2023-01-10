@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HarleyBot Chat</title>
+</head>
+<body>
+  <h1>HarleyBot Chat</h1>
+  <form action="/" method="post">
+    <input type="text" name="input">
+    <input type="submit" value="Send">
+  </form>
+  <h2>Conversation Log</h2>
+  <ul>
+    {% for message in conversation %}
+      {% if 'user' in message %}
+        <li>User: {{ message['user'] }}</li>
+      {% else %}
+        <li>HarleyBot: {{ message['chatbot'] }}</li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</body>
+</html>

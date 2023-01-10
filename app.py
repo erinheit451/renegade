@@ -1,6 +1,8 @@
 import os
 import openai
 import json
+import threading
+import telegram_bot
 from prompt import prompt
 from flask import Response
 from flask import Flask, request, render_template
@@ -71,3 +73,11 @@ def sms():
     # Create a TwiML response
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"
     return Response(twiml_response, mimetype="text/xml")
+
+# Start the Telegram bot in a separate thread
+thread = threading.Thread(target=telegram_bot.run_bot)
+thread.start()
+
+# Run the Flask app
+if __name__ == "__main__":
+    app.run()

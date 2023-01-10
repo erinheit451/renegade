@@ -1,8 +1,6 @@
 import os
 import openai
 import json
-import threading
-import telegram_bot
 from prompt import prompt
 from flask import Response
 from flask import Flask, request, render_template

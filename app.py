@@ -1,6 +1,7 @@
 import os
 import openai
 import json
+import telegram_bot
 from prompt import prompt
 from flask import Response
 from flask import Flask, request, render_template
@@ -72,3 +73,4 @@ def sms():
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"
     return Response(twiml_response, mimetype="text/xml")
 
+telegram_bot.start_bot()

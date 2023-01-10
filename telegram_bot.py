@@ -2,7 +2,7 @@ import os
 import openai
 import json
 import telegram
-from telegram.ext import Updater, CommandHandler, MessageHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContext
 from prompt import prompt
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -36,15 +36,15 @@ def generate_chatbot_response(prompt, user_input, chatlog):
     return chatbot_response
 
 # Create the bot
-bot = telegram.Bot(token=os.getenv("TELEGRAM_BOT_TOKEN"))
+bot = telegram.Bot(token="5751626277:AAG21V-LeR1tNHVjl6bIbDekKVWIVXqyNFA")
 
-# Create the Updater and pass it the bot
-updater = Updater(bot=bot, update_queue=None)
+# Create the Updater and pass it the bot's token
+updater = Updater(bot=bot)
 
 # Get the dispatcher to register handlers
 dispatcher = updater.dispatcher
 
-def handle_message(update, context):
+def handle_message(update: Updater, context: CallbackContext):
     # Get the message from the update
     message = update.message
     # Get the chat ID and message text
@@ -60,17 +60,22 @@ def handle_message(update, context):
     conversation_log.append({"chatbot": chatbot_response})
     # Save the updated conversation log to file
     with open("conversation_log.json", "w") as log_file:
-        json.dump(conversation_log, log_file)
+      json.dump(conversation_log, log_file)
 
-# Add a handler to the dispatcher to handle messages
-dispatcher.add_handler(MessageHandler(callback=handle_message))
+ # Add a handler to the dispatcher to handle messages
+    dispatcher.add_handler(MessageHandler(callback=handle_message))
 
-# Start the bot
-updater.start_polling()
+    # Start the bot
+    updater.start_polling()
 
-# Run the bot until you press Ctrl-C
-updater.idle()
+    # Run the bot until you press Ctrl-C
+    updater.idle()
 
-def run_bot():
+def start_bot():
     updater.start_polling()
     updater.idle()
+
+
+
+
+

@@ -39,7 +39,7 @@ def generate_chatbot_response(prompt, user_input, chatlog):
 bot = telegram.Bot(token=os.getenv("TELEGRAM_BOT_TOKEN"))
 
 # Create the Updater
-updater = Updater(token=os.getenv("TELEGRAM_BOT_TOKEN"), use_context=True)
+updater = Updater(token=os.getenv("TELEGRAM_BOT_TOKEN"), use_context=True, update_queue=None)
 
 # Get the dispatcher to register handlers
 dispatcher = updater.dispatcher
@@ -51,8 +51,8 @@ def handle_message(update: telegram.Update, context: CallbackContext):
     chat_id = message.chat.id
     text = message.text
     # Prune the conversation log
-    pruned_log = prune_conversation_log(conversation_log)
-    # Generate a response from the chatbot
+    pruned_log = prune_conversation_log(conversation_log) 
+        # Generate a response from the chatbot
     chatbot_response = generate_chatbot_response(prompt, text, pruned_log)
     # Send the response to the user
     context.bot.send_message(chat_id=chat_id, text=chatbot_response)

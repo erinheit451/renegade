@@ -62,7 +62,8 @@ def handle_message(update: Updater, context: CallbackContext):
     with open("conversation_log.json", "w") as log_file:
       json.dump(conversation_log, log_file)
 
- # Add a handler to the dispatcher to handle messages
+def start_bot():
+    # Add a handler to the dispatcher to handle messages
     dispatcher.add_handler(MessageHandler(callback=handle_message))
 
     # Start the bot
@@ -70,12 +71,4 @@ def handle_message(update: Updater, context: CallbackContext):
 
     # Run the bot until you press Ctrl-C
     updater.idle()
-
-def start_bot():
-    updater.start_polling()
-    updater.idle()
-
-
-
-
 

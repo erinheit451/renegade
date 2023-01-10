@@ -38,13 +38,13 @@ def generate_chatbot_response(prompt, user_input, chatlog):
 # Create the bot
 bot = telegram.Bot(token=os.getenv("TELEGRAM_BOT_TOKEN"))
 
-# Create the Updater and pass it the bot's token
-updater = Updater(bot=bot)
+# Create the Updater
+updater = Updater(token=os.getenv("TELEGRAM_BOT_TOKEN"), use_context=True)
 
 # Get the dispatcher to register handlers
 dispatcher = updater.dispatcher
 
-def handle_message(update: Updater, context: CallbackContext):
+def handle_message(update: telegram.Update, context: CallbackContext):
     # Get the message from the update
     message = update.message
     # Get the chat ID and message text
@@ -71,4 +71,3 @@ def start_bot():
 
     # Run the bot until you press Ctrl-C
     updater.idle()
-

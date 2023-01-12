@@ -1,7 +1,6 @@
 import os
 import openai
 import json
-import telegram_bot
 from prompt import prompt
 from flask import Response
 from flask import Flask, request, render_template
@@ -72,14 +71,3 @@ def sms():
     # Create a TwiML response
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"
     return Response(twiml_response, mimetype="text/xml")
-
-# Start the Telegram bot
-telegram_bot.start_bot()
-
-# Set the webhook URL
-bot = telegram_bot.bot
-bot.set_webhook(url="https://renegade.herokuapp.com/hook")
-
-
-# Run the Flask app
-app.run()

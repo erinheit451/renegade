@@ -1,8 +1,9 @@
 import os
 import openai
 import telegram
-import asyncio
+import logging
 from flask import Flask, request, Response, redirect, render_template, url_for
+from telegram.ext import Updater, CommandHandler, MessageHandler, message, Filters
 from prompt import prompt
 
 app = Flask(__name__)
@@ -57,6 +58,19 @@ def sms():
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"
     return Response(twiml_response, mimetype="text/xml")
 
+
+
+updater = Updater(token=bot_token, use_context=True)
+dispatcher = updater.dispatcher
+
+# Define the /start command handler
+def start(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Hello! I am a bot that is integrated with the OpenAI GPT-3 API. You can ask me any question and I will try to provide a response.")
+
+# Define the /help command handler
+def help(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="To use me, simply send me a message with your question. I will use the OpenAI GPT-3 API to generate a response based on the information I get.") 
+
 @app.route("/webhook", methods=["POST"])
 def webhook():
     # Get the update from Telegram
@@ -76,6 +90,16 @@ def webhook():
     # Return a 200 OK response
     return "OK"
 
+updater = Updater(token=bot_token, use_context=True)
+dispatcher = updater.dispatcher
+dispatcher.add_handler(CommandHandler('start', start))
+dispatcher.add_handler(CommandHandler('help', help))
+dispatcher.add_handler(MessageHandler(Filters.text, message))
+# Logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+updater.start_polling()
 
 
 if __name__ == '__main__':

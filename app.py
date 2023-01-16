@@ -78,7 +78,7 @@ def webhook():
     return "OK"
 
 # Set the webhook
-bot.setWebhook(url='https://coaster-amusement-mile.herokuapp.com/webhook')
+bot.setWebhook(url='https://renegade.herokuapp.com/webhook')
 
 if __name__ == '__main__':
     app.run()

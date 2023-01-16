@@ -61,23 +61,26 @@ def sms():
 def webhook():
     # Get the update from Telegram
     update = request.get_json()
+    
+    # Check if the update contains a 'message'
+    if 'message' in update:
+        message_text = update['message']['text']
 
-    # Get the message text
-    message_text = update.message.text
+        # Generate a response using the OpenAI GPT-3 API
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=message_text,
+            max_tokens=250,
+            temperature=0.7
+        )
 
-    # Generate a response using the OpenAI GPT-3 API
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=message_text,
-        max_tokens=250,
-        temperature=0.7
-    )
-
-    # Send the response to Telegram
-    bot.send_message(chat_id=update.effective_chat.id, text=response["choices"][0]["text"])
+        # Send the response to Telegram
+        bot.send_message(chat_id=update.effective_chat.id, text=response["choices"][0]["text"])
 
     # Return a 200 OK response
     return "OK"
+
+
 
 if __name__ == '__main__':
     app.run()

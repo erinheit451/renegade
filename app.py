@@ -65,18 +65,14 @@ def webhook():
     # Check if the update contains a 'message'
     if 'message' in update:
         message_text = update['message']['text']
-
-        # Generate a response using the OpenAI GPT-3 API
+        chat_id = update['message']['chat']['id']
         response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=message_text,
             max_tokens=250,
             temperature=0.7
-        )
-
-        # Send the response to Telegram
-        bot.send_message(chat_id=update.effective_chat.id, text=response["choices"][0]["text"])
-
+    )
+    bot.send_message(chat_id=chat_id, text=response["choices"][0]["text"])
     # Return a 200 OK response
     return "OK"
 

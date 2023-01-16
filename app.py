@@ -1,6 +1,7 @@
 import os
 import openai
 import telegram
+import asyncio
 from flask import Flask, request, Response, redirect, render_template, url_for
 from prompt import prompt
 
@@ -79,7 +80,8 @@ def webhook():
     return "OK"
 
 # Set the webhook
-bot.setWebhook(url='https://renegade.herokuapp.com/webhook')
+async def some_function():
+    await bot.setWebhook(url='https://renegade.herokuapp.com/webhook')
 
 if __name__ == '__main__':
     app.run()

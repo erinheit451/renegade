@@ -55,6 +55,7 @@ def sms():
     # Create a TwiML response
     twiml_response = f"<Response><Message>{chatbot_response}</Message></Response>"
     return Response(twiml_response, mimetype="text/xml")
+
 @app.route("/webhook", methods=["POST"])
 def webhook():
     # Get the update from Telegram
@@ -80,3 +81,5 @@ def webhook():
 # Set the webhook
 bot.setWebhook(url='https://renegade.herokuapp.com/webhook')
 
+if __name__ == '__main__':
+    app.run()

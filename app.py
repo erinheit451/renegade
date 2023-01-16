@@ -79,9 +79,10 @@ def webhook():
     # Return a 200 OK response
     return "OK"
 
-# Set the webhook
+if __name__ == '__main__':
+    app.run()
+
 async def some_function():
     await bot.setWebhook(url='https://renegade.herokuapp.com/webhook')
 
-if __name__ == '__main__':
-    app.run()
+asyncio.run(some_function())

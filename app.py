@@ -2,7 +2,8 @@ import os
 from telegram.ext import Updater, CommandHandler
 
 bot_token = os.environ["BOT_TOKEN"]
-updater = Updater(token=bot_token, use_context=True)
+bot = telegram.Bot(token=bot_token)
+updater = Updater(bot=bot, use_context=True)
 dispatcher = updater.dispatcher
 
 def start(update, context):

@@ -80,5 +80,3 @@ def webhook():
 # Set the webhook
 bot.setWebhook(url='https://renegade.herokuapp.com/webhook')
 
-if __name__ == '__main__':
-    app.run()
